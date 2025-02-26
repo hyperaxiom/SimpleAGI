@@ -91,7 +91,16 @@ class SimpleTokenizer:
             
         tokenizer = cls(vocab_size=data["vocab_size"])
         tokenizer.token_to_id = data["token_to_id"]
-        tokenizer.id_to_token = {int(id): token for id, token in data["token_to_id"].items()}
+        # tokenizer.id_to_token = {int(id): token for id, token in data["token_to_id"].items()}
+        # tokenizer.id_to_token = {int(id) if id.isdigit() else id: token for token, id in data["token_to_id"].items()}
+        # Or a simpler fix:
+        # tokenizer.id_to_token = {int(k): v for k, v in data["token_to_id"].items()}
+        # Reverse the token_to_id dictionary to create id_to_token
+        tokenizer.id_to_token = {}
+        for token, idx in data["token_to_id"].items():
+            if isinstance(idx, str) and idx.isdigit():
+                idx = int(idx)
+            tokenizer.id_to_token[idx] = token
         tokenizer.fitted = data["fitted"]
         
         return tokenizer

@@ -315,7 +315,8 @@ class Benchmarks:
         scores = []
         for prompt in prompts:
             # Tokenize prompt
-            input_ids = tokenizer.encode(prompt, return_tensors="pt").to(device)
+            # input_ids = tokenizer.encode(prompt, return_tensors="pt").to(device)
+            input_ids = torch.tensor([tokenizer.encode(prompt)], dtype=torch.long).to(device)
             
             # Generate response
             output_ids = model.generate(input_ids, max_length=100)
